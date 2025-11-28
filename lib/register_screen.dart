@@ -34,6 +34,18 @@ class RegisterScreen extends StatelessWidget {
                 const SizedBox(height: 40),
                 TextField(
                   decoration: InputDecoration(
+                    labelText: 'Nombre',
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.8),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  decoration: InputDecoration(
                     labelText: 'Correo electrónico',
                     filled: true,
                     fillColor: Colors.white.withOpacity(0.8),
