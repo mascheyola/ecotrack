@@ -36,7 +36,7 @@ class RegisterScreen extends StatelessWidget {
                   decoration: InputDecoration(
                     labelText: 'Nombre',
                     filled: true,
-                    fillColor: Colors.white.withOpacity(0.8),
+                    fillColor: Colors.white.withAlpha(204),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide.none,
@@ -48,7 +48,7 @@ class RegisterScreen extends StatelessWidget {
                   decoration: InputDecoration(
                     labelText: 'Correo electrónico',
                     filled: true,
-                    fillColor: Colors.white.withOpacity(0.8),
+                    fillColor: Colors.white.withAlpha(204),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide.none,
@@ -61,7 +61,7 @@ class RegisterScreen extends StatelessWidget {
                   decoration: InputDecoration(
                     labelText: 'Contraseña',
                     filled: true,
-                    fillColor: Colors.white.withOpacity(0.8),
+                    fillColor: Colors.white.withAlpha(204),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide.none,

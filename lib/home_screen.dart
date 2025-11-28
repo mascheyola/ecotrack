@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/recycling_registration_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -65,24 +66,36 @@ class HomeScreen extends StatelessWidget {
                   icon: Icons.add_circle_outline,
                   title: 'Registrar Reciclaje',
                   description: 'Registra tus materiales reciclados.',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const RecyclingRegistrationScreen(),
+                      ),
+                    );
+                  },
                 ),
                 _buildGridItem(
                   context,
                   icon: Icons.location_on_outlined,
                   title: 'Puntos de Reciclaje',
                   description: 'Encuentra puntos de reciclaje cercanos.',
+                  onTap: () {},
                 ),
                 _buildGridItem(
                   context,
                   icon: Icons.bar_chart_outlined,
                   title: 'Mis Estadísticas',
                   description: 'Consulta tu progreso y estadísticas.',
+                  onTap: () {},
                 ),
                 _buildGridItem(
                   context,
                   icon: Icons.lightbulb_outline,
                   title: 'Consejos',
                   description: 'Aprende a reciclar correctamente.',
+                  onTap: () {},
                 ),
               ],
             ),
@@ -97,12 +110,13 @@ class HomeScreen extends StatelessWidget {
     required IconData icon,
     required String title,
     required String description,
+    required VoidCallback onTap,
   }) {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: InkWell(
-        onTap: () {},
+        onTap: onTap,
         borderRadius: BorderRadius.circular(15),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
