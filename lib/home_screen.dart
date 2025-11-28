@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:myapp/recycling_points_screen.dart';
 import 'package:myapp/recycling_registration_screen.dart';
 import 'package:myapp/statistics_screen.dart';
 
@@ -82,7 +83,14 @@ class HomeScreen extends StatelessWidget {
                   icon: Icons.location_on_outlined,
                   title: 'Puntos de Reciclaje',
                   description: 'Encuentra puntos de reciclaje cercanos.',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RecyclingPointsScreen(),
+                      ),
+                    );
+                  },
                 ),
                 _buildGridItem(
                   context,
