@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/recycling_points_screen.dart';
 import 'package:myapp/recycling_registration_screen.dart';
 import 'package:myapp/statistics_screen.dart';
+import 'package:myapp/tips_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -111,7 +112,14 @@ class HomeScreen extends StatelessWidget {
                   icon: Icons.lightbulb_outline,
                   title: 'Consejos',
                   description: 'Aprende a reciclar correctamente.',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const TipsScreen(),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
