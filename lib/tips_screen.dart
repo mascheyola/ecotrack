@@ -73,10 +73,10 @@ class TipsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Row(
           children: [
-            const Icon(Icons.lightbulb_outline),
+            const Icon(Icons.recycling),
             const SizedBox(width: 10),
             Text(
-              'Consejos de Reciclaje',
+              'EcoTrack',
               style: GoogleFonts.lato(fontWeight: FontWeight.bold),
             ),
           ],
@@ -92,48 +92,55 @@ class TipsScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16.0), // This line is correct.
-              itemCount: _recyclingTips.length,
-              itemBuilder: (context, index) {
-                final tip = _recyclingTips[index];
-                return Card(
-                  elevation: 3,
-                  margin: const EdgeInsets.symmetric(vertical: 8.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
+            child: ListView(
+              padding: const EdgeInsets.all(16.0),
+              children: [
+                Text(
+                  'Consejos de Reciclaje',
+                  style: GoogleFonts.lato(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        // Accessing properties from the strongly-typed class.
-                        Icon(tip.icon, size: 40, color: Colors.green),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                tip.title,
-                                style: GoogleFonts.lato(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                tip.description,
-                                style: GoogleFonts.lato(fontSize: 14),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                ),
+                const SizedBox(height: 20),
+                ..._recyclingTips.map((tip) {
+                  return Card(
+                    elevation: 3,
+                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
-                  ),
-                );
-              },
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          Icon(tip.icon, size: 40, color: Colors.green),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  tip.title,
+                                  style: GoogleFonts.lato(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  tip.description,
+                                  style: GoogleFonts.lato(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ],
             ),
           ),
           Padding(
