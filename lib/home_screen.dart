@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/recycling_registration_screen.dart';
+import 'package:myapp/statistics_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -88,7 +89,14 @@ class HomeScreen extends StatelessWidget {
                   icon: Icons.bar_chart_outlined,
                   title: 'Mis Estadísticas',
                   description: 'Consulta tu progreso y estadísticas.',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const StatisticsScreen(),
+                      ),
+                    );
+                  },
                 ),
                 _buildGridItem(
                   context,
