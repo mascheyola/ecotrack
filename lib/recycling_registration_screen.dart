@@ -73,80 +73,95 @@ class RecyclingRegistrationScreenState
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Registrar Reciclaje',
-              style: GoogleFonts.lato(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Registrar Reciclaje',
+                    style: GoogleFonts.lato(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  _buildDropdown(
+                    label: 'Tipo de material',
+                    value: _selectedMaterial,
+                    items: _materials,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedMaterial = value;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  _buildDropdown(
+                    label: 'Peso estimado',
+                    value: _selectedWeight,
+                    items: _weights,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedWeight = value;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  _buildDropdown(
+                    label: 'Punto de reciclaje',
+                    value: _selectedLocation,
+                    items: _locations,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedLocation = value;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 30),
+                  ElevatedButton(
+                    onPressed: _submitForm,
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.green,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 50,
+                        vertical: 15,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text('Guardar registro'),
+                  ),
+                  const SizedBox(height: 20),
+                  if (_message.isNotEmpty)
+                    Text(
+                      _message,
+                      style: GoogleFonts.lato(
+                        color: _message.contains('exitosamente')
+                            ? Colors.green
+                            : Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                ],
               ),
             ),
-            const SizedBox(height: 20),
-            _buildDropdown(
-              label: 'Tipo de material',
-              value: _selectedMaterial,
-              items: _materials,
-              onChanged: (value) {
-                setState(() {
-                  _selectedMaterial = value;
-                });
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
               },
+              child: const Text('Inicio'),
             ),
-            const SizedBox(height: 20),
-            _buildDropdown(
-              label: 'Peso estimado',
-              value: _selectedWeight,
-              items: _weights,
-              onChanged: (value) {
-                setState(() {
-                  _selectedWeight = value;
-                });
-              },
-            ),
-            const SizedBox(height: 20),
-            _buildDropdown(
-              label: 'Punto de reciclaje',
-              value: _selectedLocation,
-              items: _locations,
-              onChanged: (value) {
-                setState(() {
-                  _selectedLocation = value;
-                });
-              },
-            ),
-            const SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: _submitForm,
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.green,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 50,
-                  vertical: 15,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text('Guardar registro'),
-            ),
-            const SizedBox(height: 20),
-            if (_message.isNotEmpty)
-              Text(
-                _message,
-                style: GoogleFonts.lato(
-                  color: _message.contains('exitosamente')
-                      ? Colors.green
-                      : Colors.red,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
