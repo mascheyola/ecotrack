@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:myapp/services/auth_service.dart';
-import 'package:myapp/models/user.dart';
-import 'package:myapp/wrapper.dart';
+import 'package:ecotrack/services/auth_service.dart';
+import 'package:ecotrack/models/user.dart';
+import 'package:ecotrack/wrapper.dart';
 import 'firebase_options.dart';
 
 void main() async {

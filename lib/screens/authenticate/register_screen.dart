@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/services/auth_service.dart';
+import 'package:ecotrack/services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   final Function toggleView;

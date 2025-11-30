@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/screens/home/recycling_registration_screen.dart';
-import 'package:myapp/screens/home/statistics_screen.dart';
-import 'package:myapp/screens/tips_screen.dart';
-import 'package:myapp/screens/home/recycling_points_screen.dart';
+import 'package:ecotrack/screens/home/recycling_registration_screen.dart';
+import 'package:ecotrack/screens/home/statistics_screen.dart';
+import 'package:ecotrack/screens/tips_screen.dart';
+import 'package:ecotrack/screens/home/recycling_points_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/screens/authenticate/login_screen.dart';
-import 'package:myapp/screens/authenticate/register_screen.dart';
+import 'package:ecotrack/screens/authenticate/login_screen.dart';
+import 'package:ecotrack/screens/authenticate/register_screen.dart';
 
 class Authenticate extends StatefulWidget {
   const Authenticate({super.key});

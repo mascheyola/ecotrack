@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:myapp/models/user.dart';
-import 'package:myapp/screens/home/home_screen.dart';
-import 'package:myapp/screens/authenticate/authenticate.dart';
+import 'package:ecotrack/models/user.dart';
+import 'package:ecotrack/screens/home/home_screen.dart';
+import 'package:ecotrack/screens/authenticate/authenticate.dart';
 
 class Wrapper extends StatelessWidget {
   const Wrapper({super.key});
