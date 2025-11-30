@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
@@ -62,8 +64,15 @@ class TipsScreen extends StatelessWidget {
     final String tipsText = _recyclingTips
         .map((tip) => "*${tip.title}*\n${tip.description}\n")
         .join("\n");
-    Share.share(
-      "¡Hola! Aquí te comparto unos consejos de reciclaje de EcoTrack:\n\n$tipsText",
+    Share.shareXFiles(
+      [
+        XFile.fromData(
+          Uint8List.fromList(tipsText.codeUnits),
+          name: 'recycling_tips.txt',
+          mimeType: 'text/plain',
+        ),
+      ],
+      text: "¡Hola! Aquí te comparto unos consejos de reciclaje de EcoTrack:\n\n$tipsText",
     );
   }
 
@@ -107,9 +116,7 @@ class TipsScreen extends StatelessWidget {
                   return Card(
                     elevation: 3,
                     margin: const EdgeInsets.symmetric(vertical: 8.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
