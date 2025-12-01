@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class StatisticsScreen extends StatefulWidget {
@@ -74,13 +75,13 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     String? url;
 
     if (error is FirebaseException && error.message != null) {
-      message = 'Error de Firestore: Necesita crear un índice. Por favor, haga clic en el siguiente enlace para crearlo en la consola de Firebase.\n\n${error.message}';
-      final urlRegex = RegExp(r'(https?://[^\s]+)');
+      message = 'Error de Firestore: Necesita crear un índice. Por favor, haga clic en el siguiente enlace para crearlo en la consola de Firebase.\\n\\n\${error.message}';
+      final urlRegex = RegExp(r'(https?://[^\\s]+)');
       final match = urlRegex.firstMatch(error.message!);
       if (match != null) {
         url = match.group(0);
         // Log the URL to the terminal.
-        developer.log(' Firestore Index Creation URL: $url', name: 'ecotrack.firestore');
+        developer.log(' Firestore Index Creation URL: \$url', name: 'ecotrack.firestore');
       }
     }
 
@@ -111,7 +112,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('No se pudo abrir la URL: $url')),
+        SnackBar(content: Text('No se pudo abrir la URL: \$url')),
       );
     }
   }
@@ -181,7 +182,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       return PieChartSectionData(
         color: _getColor(entry.key),
         value: entry.value,
-        title: '${(entry.value / data.values.reduce((a, b) => a + b) * 100).toStringAsFixed(0)}%',
+        title: '\${(entry.value / data.values.reduce((a, b) => a + b) * 100).toStringAsFixed(0)}%',
         radius: radius,
         titleStyle: TextStyle(
           fontSize: fontSize,
@@ -214,9 +215,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text('Total Reciclado: ${totalWeight.toStringAsFixed(2)} kg', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text('Total Reciclado: \${totalWeight.toStringAsFixed(2)} kg', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            Text('Puntos Ganados: ${(totalWeight * 10).toInt()}', style: const TextStyle(fontSize: 16, color: Colors.green)),
+            Text('Puntos Ganados: \${(totalWeight * 10).toInt()}', style: const TextStyle(fontSize: 16, color: Colors.green)),
           ],
         ),
       ),
@@ -235,13 +236,15 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
           itemCount: docs.length,
           itemBuilder: (context, index) {
             var doc = docs[index];
+            final timestamp = (doc['timestamp'] as Timestamp).toDate();
+            final formattedDate = DateFormat.yMd().format(timestamp);
             return Card(
               margin: const EdgeInsets.symmetric(vertical: 4),
               child: ListTile(
                 leading: Icon(_getMaterialIcon(doc['material']), color: _getColor(doc['material'])),
                 title: Text(doc['material'], style: const TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Text('${doc['weight']} kg - ${doc['location']}'),
-                trailing: Text((doc['timestamp'] as Timestamp).toDate().toLocaleDateString()),
+                subtitle: Text('\${doc['weight']} kg - \${doc['location']}'),
+                trailing: Text(formattedDate),
               ),
             );
           },
@@ -286,11 +289,5 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       default:
         return Icons.eco;
     }
-  }
-}
-
-extension on DateTime {
-  String toLocaleDateString() {
-    return '$day/$month/$year';
   }
 }
