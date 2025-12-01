@@ -18,14 +18,6 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   String? _userName;
 
-  final List<Widget> _screens = [
-    const DashboardScreen(),
-    const RecyclingRegistrationScreen(),
-    const StatisticsScreen(),
-    const TipsScreen(),
-    const RecyclingPointsScreen(),
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -35,18 +27,29 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _fetchUserName() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
-      if (userDoc.exists) {
-        setState(() {
-          _userName = userDoc.data()!['name'];
-        });
+      try {
+        final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+        if (mounted && userDoc.exists) {
+          setState(() {
+            _userName = userDoc.data()!['name'];
+          });
+        }
+      } catch (e) {
+        // Handle potential errors, e.g., Firestore not available
+        print("Error fetching user name: $e");
       }
     }
   }
 
+  void _onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Pass the user name to the DashboardScreen
+    // Define the screens list inside the build method to pass the user name
     final List<Widget> screens = [
       DashboardScreen(userName: _userName),
       const RecyclingRegistrationScreen(),
@@ -56,23 +59,13 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.green.shade100, Colors.blue.shade100],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: screens[_currentIndex],
+      body: IndexedStack(
+        index: _currentIndex,
+        children: screens,
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+        onTap: _onTabTapped,
         selectedItemColor: Colors.green.shade800,
         unselectedItemColor: Colors.grey.shade600,
         items: const [
@@ -108,76 +101,74 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Hola, ${userName ?? ''}',
-              style: TextStyle(fontSize: 28, color: Colors.grey.shade800),
+    return Scaffold(
+       backgroundColor: Colors.transparent, // Make scaffold background transparent
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.green.shade100, Colors.blue.shade100],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Hola, ${userName ?? ''}',
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.grey.shade800),
+                ),
+                 Text(
+                  '¿Qué te gustaría hacer hoy?',
+                  style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green.shade900),
+                ),
+                const SizedBox(height: 30),
+                Expanded(
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    children: [
+                      _buildMenuCard(
+                        context,
+                        'Registrar Reciclaje',
+                        Icons.app_registration,
+                        Colors.orange,
+                        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const RecyclingRegistrationScreen())),
+                      ),
+                      _buildMenuCard(
+                        context,
+                        'Mis Estadísticas',
+                        Icons.bar_chart,
+                        Colors.blue,
+                        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const StatisticsScreen())),
+                      ),
+                      _buildMenuCard(
+                        context,
+                        'Puntos de Reciclaje',
+                        Icons.location_on,
+                        Colors.red,
+                         () => Navigator.push(context, MaterialPageRoute(builder: (context) => const RecyclingPointsScreen())),
+                      ),
+                      _buildMenuCard(
+                        context,
+                        'Consejos de Reciclaje',
+                        Icons.lightbulb_outline,
+                        Colors.purple,
+                        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const TipsScreen())),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Text(
-              '¿Qué te gustaría hacer hoy?',
-              style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green.shade900),
-            ),
-            const SizedBox(height: 30),
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                children: [
-                  _buildMenuCard(
-                    context,
-                    'Registrar Reciclaje',
-                    Icons.app_registration,
-                    Colors.orange,
-                    () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const RecyclingRegistrationScreen())),
-                  ),
-                  _buildMenuCard(
-                    context,
-                    'Mis Estadísticas',
-                    Icons.bar_chart,
-                    Colors.blue,
-                    () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const StatisticsScreen())),
-                  ),
-                  _buildMenuCard(
-                    context,
-                    'Puntos de Reciclaje',
-                    Icons.location_on,
-                    Colors.red,
-                    () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const RecyclingPointsScreen())),
-                  ),
-                  _buildMenuCard(
-                    context,
-                    'Consejos de Reciclaje',
-                    Icons.lightbulb_outline,
-                    Colors.purple,
-                    () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const TipsScreen())),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

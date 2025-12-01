@@ -1,8 +1,10 @@
 
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({super.key});
@@ -28,6 +30,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       body: StreamBuilder<QuerySnapshot>(
         stream: _getFilteredStream(),
         builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return _buildErrorWidget(snapshot.error);
+          }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -63,6 +68,54 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       ),
     );
   }
+
+  Widget _buildErrorWidget(Object? error) {
+    String message = 'Ocurrió un error inesperado.';
+    String? url;
+
+    if (error is FirebaseException && error.message != null) {
+      message = 'Error de Firestore: Necesita crear un índice. Por favor, haga clic en el siguiente enlace para crearlo en la consola de Firebase.\n\n${error.message}';
+      final urlRegex = RegExp(r'(https?://[^\s]+)');
+      final match = urlRegex.firstMatch(error.message!);
+      if (match != null) {
+        url = match.group(0);
+        // Log the URL to the terminal.
+        developer.log(' Firestore Index Creation URL: $url', name: 'ecotrack.firestore');
+      }
+    }
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SelectableText(message, textAlign: TextAlign.center),
+            if (url != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: ElevatedButton(
+                  onPressed: () => _launchURL(url!),
+                  child: const Text('Crear Índice'),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _launchURL(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('No se pudo abrir la URL: $url')),
+      );
+    }
+  }
+
 
   Widget _buildFilterButton() {
     return PopupMenuButton<String>(
