@@ -19,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const RecyclingRegistrationScreen(),
     const StatisticsScreen(),
     const TipsScreen(),
+    const RecyclingPointsScreen(),
   ];
 
   @override
@@ -26,17 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('EcoTrack'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.location_on),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const RecyclingPointsScreen()),
-              );
-            },
-          ),
-        ],
       ),
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -62,6 +52,10 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.lightbulb_outline),
             label: 'Consejos',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.location_on),
+            label: 'Puntos',
           ),
         ],
       ),
@@ -101,6 +95,26 @@ class DashboardScreen extends StatelessWidget {
               );
             },
             child: const Text('Ver Mis Estadísticas'),
+          ),
+           const SizedBox(height: 10.0),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const RecyclingPointsScreen()),
+              );
+            },
+            child: const Text('Puntos de Reciclaje'),
+          ),
+          const SizedBox(height: 10.0),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const TipsScreen()),
+              );
+            },
+            child: const Text('Consejos de Reciclaje'),
           ),
         ],
       ),
