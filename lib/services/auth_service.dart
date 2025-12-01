@@ -23,6 +23,8 @@ class AuthService {
       return _userFromFirebaseUser(user);
     } on FirebaseAuthException catch (e) {
       return e.message;
+    } catch (e) {
+      return 'An unexpected error occurred. Please try again.';
     }
   }
 
@@ -31,11 +33,17 @@ class AuthService {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User? user = result.user;
-      // create a new document for the user with the uid
-      await DatabaseService(uid: user!.uid).updateUserData(name, 0, 0);
-      return _userFromFirebaseUser(user);
+      if (user != null) {
+        // create a new document for the user with the uid
+        await DatabaseService(uid: user.uid).updateUserData(name, 0, 0);
+        return _userFromFirebaseUser(user);
+      } else {
+        return 'Could not create user. Please try again.';
+      }
     } on FirebaseAuthException catch (e) {
       return e.message;
+    } catch (e) {
+      return 'An unexpected error occurred. Please try again.';
     }
   }
 

@@ -59,8 +59,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     dynamic result = await _auth.signInWithEmailAndPassword(email, password);
-                    if (result == null) {
-                      setState(() => error = 'No se pudo iniciar sesión con esas credenciales');
+                    if (result is String) {
+                      setState(() => error = result);
                     }
                   }
                 },
