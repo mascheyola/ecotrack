@@ -13,6 +13,7 @@
     *   **Material Types:** The selectable materials are: 'Plástico', 'Papel/cartón', 'Metal', 'Vidrio', 'Tela', and 'Tetra brik'.
     *   **Recycling Locations:** The selectable locations are: 'Casco urbano', 'Abasto', 'City Bell', 'Etcheverry', 'Gonnet', 'Gorina', 'Hernández', 'La Hermosura', 'Olmos', 'Romero', 'San Lorenzo', 'Sicardi', 'Tolosa', 'Villa Castells', 'Villa Elisa', and 'Villa Elvira'.
     *   **Data Persistence:** When a user registers a recycled material, their total points and weight are atomically updated in the Firestore database.
+    *   **Continuous Submission:** After a successful submission, the form clears automatically, allowing the user to quickly register another item without leaving the screen.
 *   **Statistics:** Users can view their recycling history and performance through charts and data visualizations.
 *   **Recycling Tips:** A screen provides helpful tips and best practices for recycling.
 *   **Recycling Points:** Users can find nearby recycling centers and drop-off locations.

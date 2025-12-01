@@ -17,7 +17,6 @@ class _RecyclingRegistrationScreenState extends State<RecyclingRegistrationScree
   String? _selectedLocation;
   final _weightController = TextEditingController();
 
-  // --- The Fix: Correct material and location lists --- //
   final List<String> _materials = [
     'Plástico',
     'Papel/cartón',
@@ -52,6 +51,16 @@ class _RecyclingRegistrationScreenState extends State<RecyclingRegistrationScree
     super.dispose();
   }
 
+  // --- The Fix: Reset form after submission --- //
+  void _resetForm() {
+    setState(() {
+      _formKey.currentState?.reset();
+      _selectedMaterial = null;
+      _selectedLocation = null;
+      _weightController.clear();
+    });
+  }
+
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       final User? user = FirebaseAuth.instance.currentUser;
@@ -64,9 +73,8 @@ class _RecyclingRegistrationScreenState extends State<RecyclingRegistrationScree
 
       final material = _selectedMaterial!;
       final weight = double.parse(_weightController.text);
-      final location = _selectedLocation!; // Use the selected location
+      final location = _selectedLocation!;
 
-      // Show a loading indicator
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -81,7 +89,10 @@ class _RecyclingRegistrationScreenState extends State<RecyclingRegistrationScree
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('¡Registro añadido con éxito!')),
         );
-        Navigator.pop(context); // Go back to the home screen
+        
+        // --- The Fix: Don't pop, just reset the form --- //
+        _resetForm(); 
+
       } catch (e) {
         Navigator.pop(context); // Hide loading indicator
         ScaffoldMessenger.of(context).showSnackBar(
@@ -112,7 +123,6 @@ class _RecyclingRegistrationScreenState extends State<RecyclingRegistrationScree
                 ),
                 const SizedBox(height: 24.0),
 
-                // --- The Fix: Correct Material Dropdown --- //
                 DropdownButtonFormField<String>(
                   value: _selectedMaterial,
                   decoration: const InputDecoration(
@@ -134,7 +144,6 @@ class _RecyclingRegistrationScreenState extends State<RecyclingRegistrationScree
                 ),
                 const SizedBox(height: 16.0),
 
-                // Weight TextFormField
                 TextFormField(
                   controller: _weightController,
                   decoration: const InputDecoration(
@@ -155,7 +164,6 @@ class _RecyclingRegistrationScreenState extends State<RecyclingRegistrationScree
                 ),
                 const SizedBox(height: 16.0),
 
-                // --- The Fix: Correct, required Location Dropdown --- //
                 DropdownButtonFormField<String>(
                   value: _selectedLocation,
                   decoration: const InputDecoration(
