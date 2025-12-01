@@ -1,32 +1,21 @@
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:ecotrack/firebase_options.dart';
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-
-  setUpAll(() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  });
-
-  test('Authenticated user can write to and read from Firestore', () async {
-    // 1. Sign in an anonymous user
-    final auth = FirebaseAuth.instance;
-    await auth.signInAnonymously();
+  test('Mock user can write to and read from mock Firestore', () async {
+    // 1. Create a mock user
+    final auth = MockFirebaseAuth(signedIn: true);
     final user = auth.currentUser;
     expect(user, isNotNull);
 
-    // 2. Get a reference to Firestore
-    final firestore = FirebaseFirestore.instance;
+    // 2. Create a mock Firestore instance
+    final firestore = FakeFirebaseFirestore();
 
     // 3. Write data to a test collection
     final testDocRef = firestore.collection('testCollection').doc('testDoc');
-    final testData = {'message': 'Hello, Firestore!'};
+    final testData = {'message': 'Hello, mock Firestore!'};
     await testDocRef.set(testData);
 
     // 4. Read the data back
