@@ -29,3 +29,4 @@
 *   **Implement functionality for the three remaining feature screens:** Statistics, Recycling Tips, and Recycling Points.
 *   **Connect the app to a Firebase backend** to store and retrieve user data, recycling logs, and other relevant information.
 *   **Flesh out the UI/UX** for each screen to ensure a polished and intuitive user experience.
+*   **Home Screen Layout:** The positions of the "Recycling Tips" and "Recycling Points" buttons have been swapped for better user flow.

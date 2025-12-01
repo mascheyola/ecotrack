@@ -106,6 +106,16 @@ class HomeScreen extends StatelessWidget {
                           );
                         },
                       ),
+                       _MenuButton(
+                        icon: Icons.location_on_outlined,
+                        label: 'Puntos de\nReciclaje',
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const RecyclingPointsScreen()),
+                          );
+                        },
+                      ),
                       _MenuButton(
                         icon: Icons.lightbulb_outline,
                         label: 'Consejos de\nReciclaje',
@@ -113,16 +123,6 @@ class HomeScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => const RecyclingTipsScreen()),
-                          );
-                        },
-                      ),
-                      _MenuButton(
-                        icon: Icons.location_on_outlined,
-                        label: 'Puntos de\nReciclaje',
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const RecyclingPointsScreen()),
                           );
                         },
                       ),
