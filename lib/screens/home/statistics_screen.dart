@@ -21,6 +21,12 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (currentUser == null) {
+      return const Center(
+        child: Text("Por favor, inicie sesión para ver sus estadísticas."),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mis Estadísticas'),
@@ -75,13 +81,12 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     String? url;
 
     if (error is FirebaseException && error.message != null) {
-      message = 'Error de Firestore: Necesita crear un índice. Por favor, haga clic en el siguiente enlace para crearlo en la consola de Firebase.\\n\\n\${error.message}';
-      final urlRegex = RegExp(r'(https?://[^\\s]+)');
+      message = 'Error de Firestore: Necesita crear un índice. Por favor, haga clic en el siguiente enlace para crearlo en la consola de Firebase.\n\n${error.message}';
+      final urlRegex = RegExp(r'(https?://[^\s]+)');
       final match = urlRegex.firstMatch(error.message!);
       if (match != null) {
         url = match.group(0);
-        // Log the URL to the terminal.
-        developer.log(' Firestore Index Creation URL: \$url', name: 'ecotrack.firestore');
+        developer.log('Firestore Index Creation URL: $url', name: 'ecotrack.firestore');
       }
     }
 
@@ -108,15 +113,16 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 
   Future<void> _launchURL(String url) async {
     final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
+    try {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('No se pudo abrir la URL: \$url')),
-      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('No se pudo abrir la URL: $url')),
+        );
+      }
     }
   }
-
 
   Widget _buildFilterButton() {
     return PopupMenuButton<String>(
@@ -147,47 +153,45 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     DateTime now = DateTime.now();
     DateTime startDate;
 
+    Query query = FirebaseFirestore.instance
+        .collection('recycling')
+        .where('userId', isEqualTo: currentUser!.uid);
+
     switch (_selectedFilter) {
       case 'Semanal':
         startDate = now.subtract(const Duration(days: 7));
+        query = query.where('timestamp', isGreaterThanOrEqualTo: startDate);
         break;
       case 'Mensual':
         startDate = DateTime(now.year, now.month, 1);
+        query = query.where('timestamp', isGreaterThanOrEqualTo: startDate);
         break;
       case 'Anual':
         startDate = DateTime(now.year, 1, 1);
+        query = query.where('timestamp', isGreaterThanOrEqualTo: startDate);
         break;
       default: // Todo
-        return FirebaseFirestore.instance
-            .collection('recycling')
-            .where('userId', isEqualTo: currentUser!.uid)
-            .orderBy('timestamp', descending: true)
-            .snapshots();
+        break;
     }
 
-    return FirebaseFirestore.instance
-        .collection('recycling')
-        .where('userId', isEqualTo: currentUser!.uid)
-        .where('timestamp', isGreaterThanOrEqualTo: startDate)
-        .orderBy('timestamp', descending: true)
-        .snapshots();
+    return query.orderBy('timestamp', descending: true).snapshots();
   }
 
   Widget _buildChart(Map<String, double> data) {
-    List<PieChartSectionData> sections = data.entries.map((entry) {
-      final isTouched = entry.key == 'touched'; // Placeholder for interactivity
-      final fontSize = isTouched ? 25.0 : 16.0;
-      final radius = isTouched ? 60.0 : 50.0;
+    final double totalValue = data.values.fold(0, (a, b) => a + b);
+    if (totalValue == 0) return const SizedBox.shrink();
 
+    List<PieChartSectionData> sections = data.entries.map((entry) {
+      final percentage = (entry.value / totalValue * 100);
       return PieChartSectionData(
         color: _getColor(entry.key),
         value: entry.value,
-        title: '\${(entry.value / data.values.reduce((a, b) => a + b) * 100).toStringAsFixed(0)}%',
-        radius: radius,
-        titleStyle: TextStyle(
-          fontSize: fontSize,
+        title: '${percentage.toStringAsFixed(0)}%',
+        radius: 50.0,
+        titleStyle: const TextStyle(
+          fontSize: 16.0,
           fontWeight: FontWeight.bold,
-          color: const Color(0xffffffff),
+          color: Color(0xffffffff),
         ),
       );
     }).toList();
@@ -215,9 +219,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text('Total Reciclado: \${totalWeight.toStringAsFixed(2)} kg', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text('Total Reciclado: ${totalWeight.toStringAsFixed(2)} kg', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            Text('Puntos Ganados: \${(totalWeight * 10).toInt()}', style: const TextStyle(fontSize: 16, color: Colors.green)),
+            Text('Puntos Ganados: ${(totalWeight * 10).toInt()}', style: const TextStyle(fontSize: 16, color: Colors.green)),
           ],
         ),
       ),
@@ -243,7 +247,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               child: ListTile(
                 leading: Icon(_getMaterialIcon(doc['material']), color: _getColor(doc['material'])),
                 title: Text(doc['material'], style: const TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Text('\${doc['weight']} kg - \${doc['location']}'),
+                subtitle: Text('${doc['weight']} kg - ${doc['location']}'),
                 trailing: Text(formattedDate),
               ),
             );
