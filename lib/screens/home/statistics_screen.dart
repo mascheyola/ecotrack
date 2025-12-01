@@ -52,8 +52,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 
           for (var doc in snapshot.data!.docs) {
             final data = doc.data() as Map<String, dynamic>;
-            final material = data['material'] as String;
-            final weight = (data['weight'] as num).toDouble();
+            final material = data['material'] as String? ?? 'Desconocido';
+            final weight = (data['weight'] as num?)?.toDouble() ?? 0.0;
 
             materialData.update(material, (value) => value + weight, ifAbsent: () => weight);
             totalWeight += weight;
@@ -239,15 +239,25 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: docs.length,
           itemBuilder: (context, index) {
-            var doc = docs[index];
-            final timestamp = (doc['timestamp'] as Timestamp).toDate();
-            final formattedDate = DateFormat.yMd().format(timestamp);
+            final doc = docs[index];
+            // Safely access data, providing default values for null fields.
+            final data = doc.data() as Map<String, dynamic>? ?? {};
+            
+            final material = data['material'] as String? ?? 'Material no disponible';
+            final weight = (data['weight'] as num?)?.toDouble() ?? 0.0;
+            final location = data['location'] as String? ?? 'Ubicación no disponible';
+            final timestamp = data['timestamp'] as Timestamp?;
+
+            final formattedDate = timestamp != null
+                ? DateFormat.yMd().format(timestamp.toDate())
+                : 'Fecha no disponible';
+
             return Card(
               margin: const EdgeInsets.symmetric(vertical: 4),
               child: ListTile(
-                leading: Icon(_getMaterialIcon(doc['material']), color: _getColor(doc['material'])),
-                title: Text(doc['material'], style: const TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Text('${doc['weight']} kg - ${doc['location']}'),
+                leading: Icon(_getMaterialIcon(material), color: _getColor(material)),
+                title: Text(material, style: const TextStyle(fontWeight: FontWeight.bold)),
+                subtitle: Text('$weight kg - $location'),
                 trailing: Text(formattedDate),
               ),
             );
