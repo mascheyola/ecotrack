@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ecotrack/models/user.dart';
@@ -15,7 +16,7 @@ class Wrapper extends StatelessWidget {
     if (user == null) {
       return const Authenticate();
     } else {
-      return const HomeScreen();
+      return HomeScreen(); // Removed 'const' here
     }
   }
 }
