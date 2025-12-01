@@ -21,9 +21,8 @@ class AuthService {
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       User? user = result.user;
       return _userFromFirebaseUser(user);
-    } catch (error) {
-      print(error.toString());
-      return null;
+    } on FirebaseAuthException catch (e) {
+      return e.message;
     }
   }
 
@@ -35,9 +34,8 @@ class AuthService {
       // create a new document for the user with the uid
       await DatabaseService(uid: user!.uid).updateUserData(name, 0, 0);
       return _userFromFirebaseUser(user);
-    } catch (error) {
-      print(error.toString());
-      return null;
+    } on FirebaseAuthException catch (e) {
+      return e.message;
     }
   }
 
