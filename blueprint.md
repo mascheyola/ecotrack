@@ -31,6 +31,7 @@ EcoTrack is a mobile application designed to empower users to track their recycl
     *   **Date Format:** The historical registers' dates are presented with the format 'dd/mm/yyyy'.
 *   **Recycling Tips:** A screen provides helpful tips and best practices for recycling.
 *   **Recycling Points:** Users can find nearby recycling centers and drop-off locations.
+    *   **Updated Locations:** The recycling points are now read from a predefined list of locations in La Plata, Buenos Aires, Argentina.
 
 ### Theming
 
