@@ -27,6 +27,7 @@ EcoTrack is a mobile application designed to empower users to track their recycl
     *   **Recycling Locations:** The selectable locations are: 'Casco urbano', 'Abasto', 'City Bell', 'Etcheverry', 'Gonnet', 'Gorina', 'Hernández', 'La Hermosura', 'Olmos', 'Romero', 'San Lorenzo', 'Sicardi', 'Tolosa', 'Villa Castells', 'Villa Elisa', and 'Villa Elvira'.
     *   **Data Persistence:** When a user registers a recycled material, their total points and weight are atomically updated in the Firestore database.
     *   **Continuous Submission:** After a successful submission, the form clears automatically, allowing the user to quickly register another item without leaving the screen.
+    *   **Horizontally Centered Success Message:** The success message after a submission is now horizontally centered at the bottom of the screen for better visibility.
 *   **Statistics:** Users can view their recycling history and performance through charts and data visualizations.
     *   **Date Format:** The historical registers' dates are presented with the format 'dd/mm/yyyy'.
 *   **Recycling Tips:** A screen provides helpful tips and best practices for recycling.

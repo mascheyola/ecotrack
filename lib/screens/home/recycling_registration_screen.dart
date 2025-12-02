@@ -87,7 +87,12 @@ class _RecyclingRegistrationScreenState extends State<RecyclingRegistrationScree
         Navigator.pop(context); // Hide loading indicator
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('¡Registro añadido con éxito!')),
+          const SnackBar(
+            content: Text(
+              '¡Registro añadido con éxito!',
+              textAlign: TextAlign.center,
+            ),
+          ),
         );
         
         // --- The Fix: Don't pop, just reset the form --- //
