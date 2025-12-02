@@ -15,6 +15,27 @@ class AuthService {
     return _auth.authStateChanges().map(_userFromFirebaseUser);
   }
 
+  String _handleAuthError(FirebaseAuthException e) {
+    switch (e.code) {
+      case 'invalid-email':
+        return 'El formato del correo electrónico no es válido.';
+      case 'user-disabled':
+        return 'Este usuario ha sido deshabilitado.';
+      case 'user-not-found':
+        return 'No se encontró un usuario con este correo electrónico.';
+      case 'wrong-password':
+        return 'La contraseña es incorrecta.';
+      case 'email-already-in-use':
+        return 'Este correo electrónico ya está en uso por otra cuenta.';
+      case 'operation-not-allowed':
+        return 'El inicio de sesión con correo electrónico y contraseña no está habilitado.';
+      case 'weak-password':
+        return 'La contraseña es demasiado débil.';
+      default:
+        return 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo.';
+    }
+  }
+
   // sign in with email and password
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
@@ -22,9 +43,9 @@ class AuthService {
       User? user = result.user;
       return _userFromFirebaseUser(user);
     } on FirebaseAuthException catch (e) {
-      return e.message;
+      return _handleAuthError(e);
     } catch (e) {
-      return 'An unexpected error occurred. Please try again.';
+      return 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo.';
     }
   }
 
@@ -38,12 +59,12 @@ class AuthService {
         await DatabaseService(uid: user.uid).updateUserData(name, 0, 0);
         return _userFromFirebaseUser(user);
       } else {
-        return 'Could not create user. Please try again.';
+        return 'No se pudo crear el usuario. Por favor, inténtalo de nuevo.';
       }
     } on FirebaseAuthException catch (e) {
-      return e.message;
+      return _handleAuthError(e);
     } catch (e) {
-      return 'An unexpected error occurred. Please try again.';
+      return 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo.';
     }
   }
 
