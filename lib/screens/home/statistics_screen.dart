@@ -249,7 +249,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
             final timestamp = data['timestamp'] as Timestamp?;
 
             final formattedDate = timestamp != null
-                ? DateFormat.yMd().format(timestamp.toDate())
+                ? DateFormat('dd/MM/yyyy').format(timestamp.toDate())
                 : 'Fecha no disponible';
 
             return Card(
