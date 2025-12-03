@@ -55,6 +55,24 @@ final List<RecyclingTip> _recyclingTips = [
     description:
         "El mejor residuo es el que no se genera. Antes de reciclar, piensa si puedes reducir tu consumo o reutilizar los objetos.",
   ),
+   const RecyclingTip(
+    icon: Icons.electrical_services_outlined,
+    title: "Electrónicos en puntos limpios",
+    description:
+        "Los aparatos electrónicos no deben ir a la basura. Llévalos a puntos limpios o tiendas que ofrezcan programas de recolección.",
+  ),
+  const RecyclingTip(
+    icon: Icons.checkroom_outlined,
+    title: "Dona o recicla la ropa",
+    description:
+        "La ropa en buen estado puede ser donada. Si está desgastada, busca programas de reciclaje textil en tu comunidad.",
+  ),
+  const RecyclingTip(
+    icon: Icons.local_fire_department_outlined,
+    title: "Aceite de cocina, con cuidado",
+    description:
+        "Nunca viertas el aceite de cocina usado por el desagüe. Almacénalo en una botella y llévalo a un punto de reciclaje de aceite.",
+  ),
 ];
 
 class TipsScreen extends StatelessWidget {
@@ -82,7 +100,7 @@ class TipsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Row(
           children: [
-            const Icon(Icons.recycling),
+            const Icon(Icons.recycling_outlined),
             const SizedBox(width: 10),
             Text(
               'EcoTrack',
